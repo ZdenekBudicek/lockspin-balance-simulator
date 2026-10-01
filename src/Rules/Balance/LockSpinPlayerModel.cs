@@ -196,6 +196,11 @@ namespace LockSpin
 
         public static string Verdict(LevelConfig level, Stats[] all, out bool ok)
         {
+            if (!LockSpinBalanceBands.HasReviewedBand(level.id))
+            {
+                ok = false;
+                return "UNRATED: no reviewed band for this expansion level";
+            }
             var band = LockSpinBalanceBands.For(level.id);
             Stats weak = all[0], casual = all[1];
             float population = PopulationWin(all);

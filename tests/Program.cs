@@ -45,6 +45,13 @@ Test("JSON report is parseable and rates are bounded", () => {
     { float rate = p.GetProperty("winRate").GetSingle(); Check(rate >= 0 && rate <= 1); Check(p.GetProperty("winWithin3").GetSingle() >= rate); }
 });
 Test("Strict mode fails an impossible target", () => Check(Simulator.Run(new[]{"--runs","3","--level","5","--target","100000","--strict"}, new StringWriter(), new StringWriter()) == 1));
+Test("Expansion reports do not claim an unreviewed acceptance band", () => {
+    var output = new StringWriter();
+    Check(Simulator.Run(new[]{"--runs","1","--level","11","--strict"}, output, new StringWriter()) == 1);
+    Check(output.ToString().Contains("UNRATED"));
+    try { LockSpinBalanceBands.For(11); throw new Exception("Expected rejection"); }
+    catch (ArgumentOutOfRangeException) { }
+});
 Test("All campaign levels terminate without mutating configuration", () => {
     foreach (var level in LockSpinCampaign.Defaults())
     {

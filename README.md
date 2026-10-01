@@ -12,7 +12,7 @@ dotnet run --project src/Simulator -c Release -- --runs 1000 --level 5 --time-li
 dotnet run --project tests -c Release
 ```
 
-Use `--help` for options. Omit `--level` to evaluate the entire included campaign. `--strict` returns exit code 1 when a level is outside its target band; normal report mode returns 0, and invalid input returns 2. Decimal options use a dot in every locale. There are no runtime NuGet dependencies.
+Use `--help` for options. Omit `--level` to evaluate the entire included campaign. `--strict` returns exit code 1 when a level is outside its target band or has no reviewed band; normal report mode returns 0, and invalid input returns 2. Decimal options use a dot in every locale. There are no runtime NuGet dependencies.
 
 ## What is interesting
 
@@ -24,7 +24,7 @@ Use `--help` for options. Omit `--level` to evaluate the entire included campaig
 
 ## Interpretation and limitations
 
-These are **assumed design profiles**, not validated predictions of human performance. Population weights and acceptance bands are designer choices, not measured player distributions. A passing band is a tuning signal, not proof that a level is enjoyable or suitable for release. A few trials are noisy; use at least 1,000 for comparisons and validate against playtests. Some included campaign levels can legitimately report outside their bands.
+These are **assumed design profiles**, not validated predictions of human performance. Population weights and acceptance bands are designer choices, not measured player distributions. A passing band is a tuning signal, not proof that a level is enjoyable or suitable for release. A few trials are noisy; use at least 1,000 for comparisons and validate against playtests. Only the original ten levels have reviewed bands. The 90 expansion levels remain available for exploratory simulation, but are reported as UNRATED and fail strict mode: the old ten-slot band template did not match their fifteen-level chapters. Rated levels can legitimately report outside their bands.
 
 The simulation uses 60 Hz steps and caps a run at 200 simulated seconds; unfinished runs are reported as `SIMULATION LIMIT`. Empty winner sets report median winning time as 0. The Unity compatibility layer implements only the APIs used by the extracted rules; it is not a general Unity replacement. The original Unity report remains the authoritative in-game check. Cross-runtime bit-for-bit reproducibility is not promised. This repository does not include the playable game, art, audio, SDKs or live telemetry.
 
