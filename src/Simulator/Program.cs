@@ -46,8 +46,16 @@ public static class Simulator
                 float relocation = LockSpinPlayerModel.RelocationRate(level);
                 if (relocation < .9f) { passed = false; verdict += "; relocation below 90%"; }
                 allPassed &= passed;
-                reports.Add(new { level = level.id, level.title, populationWinRate = LockSpinPlayerModel.PopulationWin(stats), relocation, passed, verdict,
-                    personas = stats.Select(s => new { name = s.persona.name, s.runs, s.wins, s.winRate, s.medianWinSeconds, s.perfectRate, s.threeStarShare, s.lossProgress, s.winWithin3, s.failures }) });
+                reports.Add(new
+                {
+                    level = level.id,
+                    level.title,
+                    populationWinRate = LockSpinPlayerModel.PopulationWin(stats),
+                    relocation,
+                    passed,
+                    verdict,
+                    personas = stats.Select(s => new { name = s.persona.name, s.runs, s.wins, s.winRate, s.medianWinSeconds, s.perfectRate, s.threeStarShare, s.lossProgress, s.winWithin3, s.failures })
+                });
                 if (!json)
                 {
                     output.WriteLine(FormattableString.Invariant($"Level {level.id}: {level.title} | population win {LockSpinPlayerModel.PopulationWin(stats):P1} | {verdict}"));

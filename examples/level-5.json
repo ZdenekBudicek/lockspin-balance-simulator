@@ -1,0 +1,71 @@
+{
+  "model": "assumed timing personas",
+  "runs": 1000,
+  "seedPolicy": "1000 + trial * 17; retry offsets 1000000 and 2000000",
+  "allPassed": true,
+  "levels": [
+    {
+      "level": 5,
+      "title": "Combo Lock",
+      "populationWinRate": 0.8747,
+      "relocation": 1,
+      "passed": true,
+      "verdict": "OK",
+      "personas": [
+        {
+          "name": "weak 95ms",
+          "runs": 1000,
+          "wins": 401,
+          "winRate": 0.401,
+          "medianWinSeconds": 44.349495,
+          "perfectRate": 0.4367931,
+          "threeStarShare": 0.02244389,
+          "lossProgress": 0.61930513,
+          "winWithin3": 0.836,
+          "failures": {
+            "OUT OF TIME": 565,
+            "TOO SLOW": 34
+          }
+        },
+        {
+          "name": "casual 70ms",
+          "runs": 1000,
+          "wins": 989,
+          "winRate": 0.989,
+          "medianWinSeconds": 30.29971,
+          "perfectRate": 0.5176104,
+          "threeStarShare": 0.32254803,
+          "lossProgress": 0.80909085,
+          "winWithin3": 1,
+          "failures": {
+            "OUT OF TIME": 11
+          }
+        },
+        {
+          "name": "engaged 50ms",
+          "runs": 1000,
+          "wins": 1000,
+          "winRate": 1,
+          "medianWinSeconds": 21.49151,
+          "perfectRate": 0.65303534,
+          "threeStarShare": 0.928,
+          "lossProgress": 0,
+          "winWithin3": 1,
+          "failures": {}
+        },
+        {
+          "name": "skilled 35ms",
+          "runs": 1000,
+          "wins": 1000,
+          "winRate": 1,
+          "medianWinSeconds": 18.516556,
+          "perfectRate": 0.820674,
+          "threeStarShare": 0.99,
+          "lossProgress": 0,
+          "winWithin3": 1,
+          "failures": {}
+        }
+      ]
+    }
+  ]
+}

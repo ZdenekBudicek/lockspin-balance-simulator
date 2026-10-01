@@ -65,9 +65,9 @@ namespace LockSpin
     public sealed class SpeedZoneConfig
     {
         public float startAngle;
-        [Range(10,180)] public float arc=90;
-        [Range(1,1.75f)] public float multiplier=1.25f;
-        [Range(1,20)] public float featherDegrees=10;
+        [Range(10, 180)] public float arc = 90;
+        [Range(1, 1.75f)] public float multiplier = 1.25f;
+        [Range(1, 20)] public float featherDegrees = 10;
     }
 
     [Serializable]

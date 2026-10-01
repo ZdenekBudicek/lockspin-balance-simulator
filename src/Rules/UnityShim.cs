@@ -1,8 +1,5 @@
 // Minimal UnityEngine stand-in so the real LockSpinSession source compiles outside Unity.
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace UnityEngine
 {
@@ -32,17 +29,6 @@ namespace UnityEngine
     [AttributeUsage(AttributeTargets.All)] public class CreateAssetMenuAttribute : Attribute { public string menuName, fileName; }
     [AttributeUsage(AttributeTargets.All)] public class RangeAttribute : Attribute { public RangeAttribute(float a, float b) { } }
     [AttributeUsage(AttributeTargets.All)] public class SerializeField : Attribute { }
-    public static class Resources { public static T Load<T>(string p) where T : class => null; }
-    public static class Debug { public static void Log(object o) => Console.WriteLine(o); }
-    public static class PlayerPrefs
-    {
-        static readonly Dictionary<string, int> ints = new Dictionary<string, int>();
-        public static int GetInt(string k, int d = 0) => ints.TryGetValue(k, out var v) ? v : d;
-        public static void SetInt(string k, int v) => ints[k] = v;
-        public static void Save() { }
-        public static void DeleteKey(string k) => ints.Remove(k);
-    }
-
     // Match the public-field JSON shape used by Unity without thread-local clone state.
     public static class JsonUtility
     {

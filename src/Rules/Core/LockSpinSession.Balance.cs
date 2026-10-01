@@ -12,18 +12,19 @@ namespace LockSpin
         public bool LastMissEarly { get; private set; }
         public int EarlyMisses { get; private set; }
         public int LateMisses { get; private set; }
-        public string TimingAdvice => EarlyMisses>LateMisses?"LET THE NEEDLE REACH THE COLOURED TARGET":LateMisses>0?"TAP AS THE NEEDLE ENTERS THE COLOURED TARGET":"WATCH THE NEEDLE, THEN TAP THE COLOURED TARGET";
+        public string TimingAdvice => EarlyMisses > LateMisses ? "LET THE NEEDLE REACH THE COLOURED TARGET" : LateMisses > 0 ? "TAP AS THE NEEDLE ENTERS THE COLOURED TARGET" : "WATCH THE NEEDLE, THEN TAP THE COLOURED TARGET";
         void ClassifyMiss()
         {
-            float best=float.MaxValue, signed=0;
-            for(int i=0;i<Level.segments.Count;i++) {
-                if(!IsSegmentActive(i) || Level.segments[i].kind==SegmentKind.Neutral) continue;
-                var s=Level.segments[i]; float delta=Mathf.DeltaAngle(s.startAngle+s.arc*.5f,Angle);
-                float distance=Mathf.Max(0,Mathf.Abs(delta)-s.arc*.5f);
-                if(distance<best) { best=distance; signed=delta*direction; }
+            float best = float.MaxValue, signed = 0;
+            for (int i = 0; i < Level.segments.Count; i++)
+            {
+                if (!IsSegmentActive(i) || Level.segments[i].kind == SegmentKind.Neutral) continue;
+                var s = Level.segments[i]; float delta = Mathf.DeltaAngle(s.startAngle + s.arc * .5f, Angle);
+                float distance = Mathf.Max(0, Mathf.Abs(delta) - s.arc * .5f);
+                if (distance < best) { best = distance; signed = delta * direction; }
             }
-            LastMissNear=best<=CurrentSpeed*.12f; LastMissEarly=signed<0;
-            if(LastMissNear) { if(LastMissEarly) EarlyMisses++; else LateMisses++; }
+            LastMissNear = best <= CurrentSpeed * .12f; LastMissEarly = signed < 0;
+            if (LastMissNear) { if (LastMissEarly) EarlyMisses++; else LateMisses++; }
         }
         double tapOffsetSum, tapOffsetSquares;
 

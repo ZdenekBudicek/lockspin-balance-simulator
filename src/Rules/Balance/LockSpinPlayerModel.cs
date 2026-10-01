@@ -67,7 +67,7 @@ namespace LockSpin
             for (int i = 0; i < n; i++) seenAt[i] = float.NaN;
             int plan = -1; float err = 0, lastDir = s.Direction, t = 0;
             float runBias = (float)(Gauss(rng) * p.bias);
-            if(persistentBias.HasValue) runBias=persistentBias.Value;
+            if (persistentBias.HasValue) runBias = persistentBias.Value;
             while (!s.Finished && t < 200)
             {
                 s.Tick(Dt); t += Dt;
@@ -113,25 +113,34 @@ namespace LockSpin
                 }
                 if (rng.NextDouble() < p.stray * Dt) s.Tap();
             }
-            return new Run { won = s.Won, elapsed = s.Elapsed, progress = s.ResultProgress, failure = s.Failure,
-                stars = s.Stars, misses = s.Misses, perfects = s.Perfects, hits = s.Hits };
+            return new Run
+            {
+                won = s.Won,
+                elapsed = s.Elapsed,
+                progress = s.ResultProgress,
+                failure = s.Finished ? s.Failure : "SIMULATION LIMIT",
+                stars = s.Stars,
+                misses = s.Misses,
+                perfects = s.Perfects,
+                hits = s.Hits
+            };
         }
 
         public static Stats Evaluate(LevelConfig level, Persona p, int runs, bool withAssist = true)
         {
-            if(runs<=0) throw new ArgumentOutOfRangeException(nameof(runs));
+            if (runs <= 0) throw new ArgumentOutOfRangeException(nameof(runs));
             var stats = new Stats { persona = p, runs = runs };
             var winTimes = new List<float>();
-            int winsWithin3=0;
-            var thirdAttempt=withAssist?LockSpinAssist.Apply(level,1):level;
+            int winsWithin3 = 0;
+            var thirdAttempt = withAssist ? LockSpinAssist.Apply(level, 1) : level;
             int threeStars = 0, hits = 0, perfects = 0; float lossProgress = 0;
             for (int i = 1; i <= runs; i++)
             {
-                int seed=1000+i*17;
+                int seed = 1000 + i * 17;
                 var r = Play(level, p, seed);
                 // Follow the same player's early/late tendency across retries, not independent population averages.
-                float bias=(float)(Gauss(new System.Random(seed*31+7))*p.bias);
-                if(r.won || Play(level,p,seed+1000000,bias).won || Play(thirdAttempt,p,seed+2000000,bias).won)
+                float bias = (float)(Gauss(new System.Random(seed * 31 + 7)) * p.bias);
+                if (r.won || Play(level, p, seed + 1000000, bias).won || Play(thirdAttempt, p, seed + 2000000, bias).won)
                     winsWithin3++;
                 hits += r.hits; perfects += r.perfects;
                 if (r.won) { stats.wins++; winTimes.Add(r.elapsed); if (r.stars == 3) threeStars++; }
@@ -144,12 +153,19 @@ namespace LockSpin
             }
             winTimes.Sort();
             stats.winRate = stats.wins / (float)runs;
-            stats.medianWinSeconds = winTimes.Count > 0 ? winTimes[winTimes.Count / 2] : 0;
+            stats.medianWinSeconds = MedianSorted(winTimes);
             stats.threeStarShare = stats.wins > 0 ? threeStars / (float)stats.wins : 0;
             stats.perfectRate = hits > 0 ? perfects / (float)hits : 0;
             stats.lossProgress = runs > stats.wins ? lossProgress / (runs - stats.wins) : 0;
             stats.winWithin3 = winsWithin3 / (float)runs;
             return stats;
+        }
+
+        public static float MedianSorted(IReadOnlyList<float> sorted)
+        {
+            if (sorted.Count == 0) return 0;
+            int middle = sorted.Count / 2;
+            return sorted.Count % 2 == 1 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
         }
 
         // all = Evaluate results in the order of All.

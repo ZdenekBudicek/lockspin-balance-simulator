@@ -6,6 +6,12 @@ int count = 0;
 void Test(string name, Action action) { action(); count++; Console.WriteLine("PASS " + name); }
 void Check(bool condition) { if (!condition) throw new Exception("Assertion failed"); }
 
+Test("Median handles odd, even and empty winner sets", () => {
+    Check(LockSpinPlayerModel.MedianSorted(new float[]{1, 3, 9}) == 3);
+    Check(LockSpinPlayerModel.MedianSorted(new float[]{1, 3, 9, 11}) == 6);
+    Check(LockSpinPlayerModel.MedianSorted(Array.Empty<float>()) == 0);
+});
+
 Test("Seeded simulation repeats exactly", () => {
     var l = LockSpinCampaign.Defaults()[4];
     var a = LockSpinPlayerModel.Play(l, LockSpinPlayerModel.Casual, 1017);
